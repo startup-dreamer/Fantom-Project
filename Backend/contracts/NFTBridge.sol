@@ -13,7 +13,10 @@ contract Quantum is Ownable {
     // Token ID => sender
     mapping(uint256 => address) public _tokenIdToSender;
 
-    event lockNftLog(address indexed owner_, uint256 indexed tokenId_);
+    event lockNftLog(
+        address indexed owner_, 
+        uint256 indexed tokenId_
+        );
 
     event migrateLog(
         address indexed from_,
@@ -21,9 +24,14 @@ contract Quantum is Ownable {
         uint256 indexed tokenId_
     );
 
-    event mintLog(address indexed to_, uint256 indexed tokenId_);
+    event mintLog(
+        address indexed to_, 
+        uint256 indexed tokenId_
+        );
 
-    constructor(address tokenAddr_) Ownable() {
+    constructor(
+        address tokenAddr_
+        ) Ownable() {
         token = TokenInterface(tokenAddr_);
     }
 
