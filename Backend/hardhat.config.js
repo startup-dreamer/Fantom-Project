@@ -17,12 +17,12 @@ module.exports = {
     mainnet: {
       url: `https://rpcapi.fantom.network`,
       chainId: 250,
-      accounts: [`0x${PRIVATE_KEY}`]
+      accounts: [`0x231470531281029c7ff44196b913bcc6ab62ab6a04ccebcdc99366cf031be0c8`]
     },
     testnet: {
       url: `https://rpc.testnet.fantom.network`,
       chainId: 4002,
-      accounts: [`0x${PRIVATE_KEY}`]
+      accounts: [`0x231470531281029c7ff44196b913bcc6ab62ab6a04ccebcdc99366cf031be0c8`]
     },
     coverage: {
       url: 'http://localhost:8555'
