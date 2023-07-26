@@ -1,67 +1,68 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./IERC721Modified.sol";
-import "./ERC20Modified.sol";
+import "../interface/IERC721Modified.sol";
+import "../standard-modified/ERC20Modified.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract NFTFractionlize is ERC721Holder, Context {
-    mapping(IERC721Modified => address) public contractToOwner;
-
-    struct data {
-        address liquidator_;
-        IERC721Modified nftcontract_;
-        ERC20Modified erc20contract_;
-        uint256 tokenId_;
-        uint256 tokenAmount_;
+contract NFTFractionalize is ERC721Holder, Context {
+    struct FractionalData {
+        address liquidator;
+        IERC721Modified nftContract;
+        ERC20Modified erc20Contract;
+        uint256 tokenId;
+        uint256 tokenAmount;
     }
-    mapping(address => data) public ownerData;
+    mapping(address => FractionalData) public fractionalData;
 
-    function transferNFT(address nftcontract_, uint256 tokenId_, uint256 amount_) external {
-        require(amount_ > 0, "TOKEN_AMOUNT_CAN'T_BE_ZERO");
-        IERC721Modified nftcontract = IERC721Modified(nftcontract_);
-        require(nftcontract.ownerOf(tokenId_) == _msgSender(), "SENDER_IS_NOT_OWNER");
-        contractToOwner[nftcontract] = _msgSender();
-        _transferMint(nftcontract, tokenId_, amount_);
+    function transferNFT(string memory name_, string memory symbol_, address nftContractAddr, uint256 tokenId, uint256 amount) external {
+        require(amount > 0, "TOKEN_AMOUNT_CAN'T_BE_ZERO");
+        IERC721Modified nftContract = IERC721Modified(nftContractAddr);
+        require(nftContract.ownerOf(tokenId) == _msgSender(), "SENDER_IS_NOT_OWNER");
+        _transferAndMint(name_, symbol_, nftContract, tokenId, amount);
     }
 
-    function _transferMint(IERC721Modified nftcontract_, uint256 tokenId_, uint256 amount_) internal {
-        ERC20Modified erc20 = new ERC20Modified(nftcontract_.name(), nftcontract_.symbol(), _msgSender());
+    function _transferAndMint(string memory name_, string memory symbol_, IERC721Modified nftContract, uint256 tokenId, uint256 amount) internal {
+        ERC20Modified erc20 = new ERC20Modified(name_, symbol_, msg.sender, amount);
 
-        data memory da = data({
-            liquidator_: _msgSender(),
-            nftcontract_: nftcontract_,
-            erc20contract_: erc20,
-            tokenId_: tokenId_,
-            tokenAmount_: amount_
+        FractionalData memory data = FractionalData({
+            liquidator: _msgSender(),
+            nftContract: nftContract,
+            erc20Contract: erc20,
+            tokenId: tokenId,
+            tokenAmount: amount
         });
-        ownerData[_msgSender()] = da;
 
-        nftcontract_.safeTransferFrom(da.liquidator_, address(this), da.tokenId_);
-        erc20.mint(da.liquidator_, da.tokenAmount_);
+        fractionalData[address(erc20)] = data;
+        (bool success, ) = address(nftContract).call(
+            abi.encodeWithSignature("transferFrom(address,address,uint256)", msg.sender, address(this), tokenId)
+        );
+        require(success, "Failed to transfer NFT");
     }
 
-    function putForSale(uint256 amount_) external {
-        data storage da = ownerData[_msgSender()];
-        require(da.liquidator_ == _msgSender(), "ERR_SENDER_IS_NOT_LIQUIDATOR");
-        da.erc20contract_.putForSale(amount_);
+    function putForSale(address erc20TokenAddress, uint256 amount) external {
+        (bool success, ) = erc20TokenAddress.call(
+            abi.encodeWithSignature("putForSale(uint256)", amount)
+        );
+        require(success, "Failed to call putForSale function");
     }
 
-    function purchase(address erc20TokenAddress_) external payable {
-        data storage da = ownerData[_msgSender()];
-        da.nftcontract_.safeTransferFrom(address(this), _msgSender(), da.tokenId_);
-        da.erc20contract_.purchase();
+    function purchase(address erc20TokenAddress) external payable {
+        FractionalData memory data = fractionalData[erc20TokenAddress];
+        (bool success, ) = erc20TokenAddress.call{value: data.erc20Contract.salePrice()}(
+            abi.encodeWithSignature("purchase()")
+        );
+        require(success, "Failed to call purchase function");
+        data.nftContract.transferFrom(address(this), msg.sender, data.tokenId);
     }
 
-    function redeemToken(uint256 amount_) external {
-        data storage da = ownerData[_msgSender()];
-        require(da.erc20contract_.canRedeem(), "CAN'T_REDEEM_TOKEN_YET");
-        require(da.erc20contract_.balanceOf(_msgSender()) == amount_, "INVALID_AMOUNT_FOR_REDEMPTION");
-        uint256 salePrice = uint256(da.erc20contract_.salePrice());
-        uint256 redeemAmount = (salePrice * amount_) / da.erc20contract_.totalSupply();
-        da.erc20contract_.burn(_msgSender(), amount_);
-        (bool success, ) = payable(msg.sender).call{value: redeemAmount}("");
-        require(success, "ERR_VALUE_NOT_TRANSFERED");
+    function redeemToken(address erc20TokenAddress, uint256 amount) external {
+        FractionalData memory data = fractionalData[erc20TokenAddress];
+        (bool success, ) = erc20TokenAddress.call{value: data.erc20Contract.salePrice()}(
+            abi.encodeWithSignature("redeemToken(uint256)", amount)
+        );
+        require(success, "Failed to call redeemToken function");
     }
 }

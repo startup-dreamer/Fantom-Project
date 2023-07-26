@@ -1438,8 +1438,8 @@
       ]
     },
     "C:\\Users\\sumit gupta\\Desktop\\desktop\\Aurum protocol\\FractionX\\FractionX\\Backend\\contracts\\FractionX\\ERC20Modified.sol": {
-      "lastModificationDate": 1688662134336,
-      "contentHash": "5ef2c56dc385425dd02a42a7cfb3c72f",
+      "lastModificationDate": 1688856380015,
+      "contentHash": "527c01681e6020c8261a74cbd9de428c",
       "sourceName": "contracts/FractionX/ERC20Modified.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -1475,8 +1475,8 @@
       ]
     },
     "C:\\Users\\sumit gupta\\Desktop\\desktop\\Aurum protocol\\FractionX\\FractionX\\Backend\\contracts\\FractionX\\NFTFractionalize.sol": {
-      "lastModificationDate": 1688664603977,
-      "contentHash": "5943bb2ddbbfa080824533cf0127c963",
+      "lastModificationDate": 1688897638412,
+      "contentHash": "7dd185701b5488d9ba6b5bb03ca4dd54",
       "sourceName": "contracts/FractionX/NFTFractionalize.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -1505,13 +1505,14 @@
         "./IERC721Modified.sol",
         "./ERC20Modified.sol",
         "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol",
-        "@openzeppelin/contracts/utils/Context.sol"
+        "@openzeppelin/contracts/utils/Context.sol",
+        "@openzeppelin/contracts/token/ERC721/ERC721.sol"
       ],
       "versionPragmas": [
         "^0.8.17"
       ],
       "artifacts": [
-        "NFTFractionlize"
+        "NFTFractionalize"
       ]
     },
     "C:\\Users\\sumit gupta\\Desktop\\desktop\\Aurum protocol\\FractionX\\FractionX\\Backend\\contracts\\FractionX\\IERC721Modified.sol": {
@@ -1552,8 +1553,8 @@
       ]
     },
     "C:\\Users\\sumit gupta\\Desktop\\desktop\\Aurum protocol\\FractionX\\FractionX\\Backend\\contracts\\FractionX-Upgradeable\\ERC20UpgradeableModified.sol": {
-      "lastModificationDate": 1688661928526,
-      "contentHash": "d143dcf04813a340c94d7e4a5c546d86",
+      "lastModificationDate": 1688668864725,
+      "contentHash": "7823408d505617b32c06b4d59c07bcd0",
       "sourceName": "contracts/FractionX-Upgradeable/ERC20UpgradeableModified.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -1578,9 +1579,16 @@
           }
         }
       },
-      "imports": [],
-      "versionPragmas": [],
-      "artifacts": []
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC20UpgradeableModified"
+      ]
     },
     "C:\\Users\\sumit gupta\\Desktop\\desktop\\Aurum protocol\\FractionX\\FractionX\\Backend\\contracts\\FractionX-Upgradeable\\FractionX-Upgradeable.sol": {
       "lastModificationDate": 1688661931496,
@@ -1645,8 +1653,8 @@
       "artifacts": []
     },
     "C:\\Users\\sumit gupta\\Desktop\\desktop\\Aurum protocol\\FractionX\\FractionX\\Backend\\contracts\\FractionX-Upgradeable\\NFT-Fractionalization.sol": {
-      "lastModificationDate": 1688661941187,
-      "contentHash": "b5925bfc3393a84ad2b199d01e962417",
+      "lastModificationDate": 1688724332761,
+      "contentHash": "2bba9d8802c5767cf22abf1eb48173ad",
       "sourceName": "contracts/FractionX-Upgradeable/NFT-Fractionalization.sol",
       "solcConfig": {
         "version": "0.8.17",
@@ -1671,9 +1679,19 @@
           }
         }
       },
-      "imports": [],
-      "versionPragmas": [],
-      "artifacts": []
+      "imports": [
+        "@openzeppelin/contracts/token/ERC721/IERC721.sol",
+        "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol",
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Fractional_NFT"
+      ]
     }
   }
 }

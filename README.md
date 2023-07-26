@@ -3,6 +3,8 @@
 ## Overview
 The Fractional NFT project is a Solidity smart contract that facilitates fractional ownership, lending, and redemption of non-fungible tokens (NFTs) on the Ethereum blockchain. It allows users to tokenize an NFT and mint ERC20 tokens that represent fractions of the NFT. These ERC20 tokens can be traded, lent, and redeemed for a proportional share of the NFT's value.
 
+![](./Backend/contracts/schema.svg)
+
 ## Features
 - Fractionalize NFTs: Transfer an NFT to the contract and mint ERC20 tokens representing fractions of the NFT.
 - NFT Lending: Users can lend their NFT fractions to others and earn interest.
